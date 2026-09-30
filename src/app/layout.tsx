@@ -1,0 +1,8 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { Menu, ShieldCheck } from "lucide-react";
+import { AdminNav } from "@/components/admin-nav";
+import { requireAdmin } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
+export default async function AdminLayout({children}:{children:ReactNode}){const admin=await requireAdmin();return <div className="min-h-screen bg-[#f4f7fa]"><div className="flex"><AdminNav/><div className="min-w-0 flex-1"><header className="flex h-[68px] items-center justify-between border-b border-slate-200 bg-white px-4 md:px-7"><div className="flex items-center gap-3"><Link href="/admin/courses" className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 lg:hidden" aria-label="الكورسات"><Menu size={19}/></Link><div><p className="text-xs text-slate-400">لوحة التحكم</p><b className="text-sm text-[#071c34]">مرحبًا، {admin.fullName}</b></div></div>{"preview" in admin&&<span className="status-pill bg-orange-50 text-[#c65a26]"><ShieldCheck size={14}/>وضع المعاينة</span>}</header><main className="p-4 md:p-7">{children}</main><nav className="fixed inset-x-3 bottom-3 z-40 flex justify-around rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-xl backdrop-blur lg:hidden"><Link className="px-3 py-2 text-xs font-bold" href="/admin">الرئيسية</Link><Link className="px-3 py-2 text-xs font-bold text-[#e5692f]" href="/admin/courses">الكورسات</Link><Link className="px-3 py-2 text-xs font-bold" href="/admin/students">الطلاب</Link><Link className="px-3 py-2 text-xs font-bold" href="/admin/settings">الإعدادات</Link></nav></div></div></div>}
