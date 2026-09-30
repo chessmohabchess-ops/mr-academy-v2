@@ -1,0 +1,5 @@
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import { CreditCard, LoaderCircle } from "lucide-react";
+export function CheckoutButton({courseId,authenticated}:{courseId:string;authenticated:boolean}){const [loading,setLoading]=useState(false);const [error,setError]=useState("");async function checkout(){setLoading(true);setError("");try{const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({courseId})});const d=await r.json();if(!r.ok)throw new Error(d.error);window.location.href=d.checkoutUrl}catch(e){setError(e instanceof Error?e.message:'تعذر بدء الدفع');setLoading(false)}}if(!authenticated)return <Link href={`/login`} className="btn-primary w-full"><CreditCard size={18}/>سجّل الدخول للشراء</Link>;return <div><button className="btn-primary w-full" onClick={checkout} disabled={loading}>{loading?<LoaderCircle size={18} className="animate-spin"/>:<CreditCard size={18}/>}شراء الكورس</button>{error&&<p className="toast-error mt-3 text-sm">{error}</p>}</div>}
